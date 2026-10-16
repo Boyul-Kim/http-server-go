@@ -43,7 +43,7 @@ func handleConn(conn net.Conn) {
 			fmt.Printf("Error reading connection buf: %v", err)
 			continue
 		}
-
-		conn.Write([]byte("HTTP/1.1 200 OK\r\n\r\n"))
+		response := "HTTP/1.1 200 OK\r\n\r\n"
+		conn.Write([]byte(response))
 	}
 }
