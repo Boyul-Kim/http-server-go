@@ -22,9 +22,28 @@ func main() {
 		os.Exit(1)
 	}
 
-	_, err = l.Accept()
-	if err != nil {
-		fmt.Println("Error accepting connection: ", err.Error())
-		os.Exit(1)
+	for {
+		conn, err := l.Accept()
+		if err != nil {
+			fmt.Printf("Error accepting connection: %v", err)
+			continue
+		}
+
+		go handleConn(conn)
+	}
+}
+
+func handleConn(conn net.Conn) {
+	defer conn.Close()
+
+	for {
+		buf := make([]byte, 1024)
+		_, err := conn.Read(buf)
+		if err != nil {
+			fmt.Printf("Error reading connection buf: %v", err)
+			continue
+		}
+
+		conn.Write([]byte("HTTP/1.1 200 OK\r\n\r\n"))
 	}
 }
